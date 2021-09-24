@@ -1,0 +1,12 @@
+{
+  "name": "cncjs-raspi-seven",
+  "version": "0.0.0",
+  "description": "Raspberry Pi 7in Display UI",
+  "scripts": {
+  },
+  "author": "Christopher Ross",
+  "license": "MIT",
+  "devDependencies": {
+    "cncjs": "^1.9.22"
+  }
+}
