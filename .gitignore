@@ -1,6 +1,9 @@
 **/cncjsshopfloortablet/**
 downloads/
-.goproject.py
+.goproject*
+watch/
+src/src_app.js
+.cncrc
 
 # #######################################################
 # https://github.com/github/gitignore/blob/master/Node.gitignore
@@ -91,7 +94,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# dist
 
 # Gatsby files
 .cache/

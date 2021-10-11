@@ -1,0 +1,511 @@
+<!doctype html>
+<div lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous"> -->
+
+  <link href="dist/main.css" rel="stylesheet" crossorigin="anonymous">
+
+  <title>CNCjs</title>
+</head>
+
+<div id="page-loading">
+  <h1>Loading</h1>
+</div>
+
+<div id="page-connection" class="hidden" data-route="connection">
+
+  <div class="container back-btns hidden" id="connection-back">
+    <div class="row">
+      <div class="col-12 text-right">
+        <a href="#/workspace" type="button" class="btn btn-primary axis-button"><i class="fas fa-angle-left"></i> Back to Workspace</a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-3">
+        <label for="controller-type" class="form-label">Controller Type</label>
+        <select id="controller-type" class="form-select" data-name="controllerType">
+            <option value="Grbl" selected>Grbl</option>
+            <option value="Smoothie">Smoothie</option>
+            <option value="TinyG">TinyG</option>
+            <option value="Marlin">Marlin</option>
+        </select>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-8">
+
+
+
+        <label for="controller-port" class="form-label">Port</label>
+        
+        <div class="input-group">
+          <select class="form-select"id="controller-port" class="form-select" data-name="port" disabled>
+          </select>
+          <button class="btn btn-outline-secondary" type="button" data-name="btn-ports-sync"><i class="fas fa-sync"></i></button>
+        </div>
+        
+        <!-- <select id="controller-port" class="form-select" data-name="port"></select> -->
+      </div>
+      <div class="col-4">
+        <label for="controller-baud" class="form-label">Baud rate</label>
+        <select id="controller-baud" class="form-select" data-name="baudrate">
+          <option value="250000">250000</option>
+          <option value="115200" selected>115200</option>
+          <option value="57600">57600</option>
+          <option value="38400">38400</option>
+          <option value="19200">19200</option>
+          <option value="9600">9600</option>
+          <option value="4800">4800</option>
+          <option value="2400">2400</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-right connect-btns">
+        <button type="button" class="btn btn-primary" data-name="btn-open">Open</button>
+        <button type="button" class="btn btn-danger" data-name="btn-close" disabled>Close</button>
+      </div>
+    </div>
+
+    
+    <div class="row">
+      <div class="alert alert-danger mt-5 hidden" id="connection-error">Could Not conenct to Port 10</div>
+      
+    </div>
+  </div>
+
+</div>
+
+<div id="page-main" class="hidden" data-route="workspace">
+
+  <nav class="navbar navbar-fixed-top navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="d-flex">
+          <input data-name="active-state" class="form-control" id="active-state" readonly type="text" value="">
+        </form>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <button type="button" class="btn btn-light me-2 state-btn" id="btn-start" disabled>Left</button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-light me-2 state-btn" id="btn-pause" disabled>Right</button>
+          </li>
+        </ul>
+        <div class="navbar-text rounded" id="line">--</div>
+        <div class="navbar-text rounded" id="runtime">--</div>
+
+        <div class="dropdown ms-2">
+          <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a href="javascript:void(0)" onclick="application.workspaceView.toggleFullscreen()" class="dropdown-item"><i class="fas fa-fw fa-expand-arrows-alt"></i>&nbsp;&nbsp;Fullscreen</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.controller.command('homing')"><i class="fas fa-fw fa-home"></i>&nbsp;&nbsp;Homing</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.controller.command('gcode', 'G28.2 A0')"><i class="fas fa-fw fa-home"></i>&nbsp;&nbsp;Home A</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.controller.command('gcode', 'M5')"><i class="fas fa-fw fa-power-off"></i>&nbsp;&nbsp;Spindle Off</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.controller.command('gcode', '$SLP')"><i class="fas fa-fw fa-bed"></i>&nbsp;&nbsp;Sleep</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.controller.command('unlock')"><i class="fas fa-fw fa-unlock-alt"></i>&nbsp;&nbsp;Unlock</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.controller.command('reset')"><i class="fas fa-fw fa-undo"></i>&nbsp;&nbsp;Reset</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.machine.probe()"><i class="fas fa-fw fa-pencil-alt"></i>&nbsp;&nbsp;Probe</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0)" onclick="application.machine.runUserCommand('HardReset')"><i class="fas fa-fw fa-undo"></i>&nbsp;&nbsp;HardReset</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" href="#/connection"><i class="fas fa-fw fa-chevron-left"></i>&nbsp;&nbsp;Connection</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="axis-panel">
+
+    <table>
+      <tr>
+        <td class="cmd-col" style="padding-right: 5px;"><div class="rounded cell-value" data-name="wpos-label">wpos</div></td>
+        <td class="axis-label-col">X</td>
+        <td class="axis-value-col">
+          <form class="d-flex">
+            <input class="form-control axis-value" id="wpos-x" type="text" value="--" aria-label="Search">
+          </form>
+        </td>
+        <td class="axis-label-col">Y</td>
+        <td class="axis-value-col">
+          <form class="d-flex">
+            <input class="form-control axis-value" id="wpos-y" type="text" value="--" aria-label="Search">
+          </form>
+        </td>
+        <td class="axis-label-col">Z</td>
+        <td class="axis-value-col">
+          <form class="d-flex">
+            <input class="form-control axis-value" id="wpos-z" type="text" value="--" aria-label="Search">
+          </form>
+        </td>
+        <td class="axis-label-col">A</td>
+        <td class="axis-value-col">
+          <form class="d-flex">
+            <input class="form-control axis-value" id="wpos-a" type="text" value="--" aria-label="Search">
+          </form>
+        </td>
+      </tr>
+      <tr>
+
+        <td class="cmd-col" style="padding-right: 5px;"><div class="rounded cell-value" id="spindle">0 RPM Off</div></td>
+        <td class="axis-label-col"></td>
+        <td class="axis-value-col">
+          <button type="button" class="btn btn-dark axis-button float-start" id="btn-zeroAxisX">X=0</button>
+          <button type="button" class="btn btn-dark axis-button float-end" id="btn-goAxisX0"><i class="fas fa-long-arrow-alt-right"></i> X0</button>
+        </td>
+        <td class="axis-label-col"></td>
+        <td class="axis-value-col">
+          <button type="button" class="btn btn-dark axis-button float-start" id="btn-zeroAxisY">Y=0</button>
+          <button type="button" class="btn btn-dark axis-button float-end" id="btn-goAxisY0"><i class="fas fa-long-arrow-alt-right"></i> Y0</button>
+        </td>
+        <td class="axis-label-col"></td>
+        <td class="axis-value-col">
+          <button type="button" class="btn btn-dark axis-button float-start" id="btn-zeroAxisZ">Z=0</button>
+          <button type="button" class="btn btn-dark axis-button float-end" id="btn-goAxisZ0"><i class="fas fa-long-arrow-alt-right"></i> Z0</button>
+        </td>
+        <td class="axis-label-col"></td>
+        <td class="axis-value-col">
+          <button type="button" class="btn btn-dark axis-button float-start" id="btn-zeroAxisA">A=0</button>
+          <button type="button" class="btn btn-dark axis-button float-end" id="btn-goAxisA0"><i class="fas fa-long-arrow-alt-right"></i> A0</button>
+        </td>
+      </tr>
+
+    </table>
+
+
+  </div>
+
+
+
+  <div class="tab-panel">
+
+    <div class="tabs align-middle">
+      <div><button type="button" class="btn btn-dark" id="btn-tab-jog">Jog</button></div>
+      <div><button type="button" class="btn btn-dark" id="btn-tab-gcode">GCode</button></div>
+      <div><button type="button" class="btn btn-dark" id="btn-tab-mdi">MDI</button></div>
+      <div><button type="button" class="btn btn-danger-not-selected" id="btn-tab-errors">Error</button></div>
+      <!-- <div><button type="button" class="btn btn-warning" id="btn-tab-test">Test</button></div> -->
+
+      <div class="dropdown units-btn">
+        <button class="btn btn-light dropdown-toggle" type="button" id="units" data-bs-toggle="dropdown" aria-expanded="false">units </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#" id="units-inch">Inch</a></li>
+          <li><a class="dropdown-item" href="#" id="units-mm">mm</a></li>
+        </ul>
+      </div>
+
+
+    </div>
+
+    
+    <div class="tab-content" id="tab-errors">
+
+      <div class="container-fluid">
+        
+        <div class="alert alert-danger fade show" role="alert">
+          <h2 id="error-title">Error</h2>
+          <div id="error-body"> You should check in on some of those fields below.</div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" id="btn-errors-dismiss">Dismiss</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-jog">
+
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="xy-panel">
+
+            <table class="jog-xy-pendant">
+              <tr>
+                <td><div class="cell-value rounded" id="distance">G--</div></td>
+                <td></td>
+                <td><button type="button" class="btn btn-primary btn-jog-xy"" id="btn-jog-y-plus">Y+</button></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                  <!-- <div class="cell-value rounded">0 RPM</div> -->
+                </td>
+                <td><button type="button" class="btn btn-primary btn-jog-xy"" id="btn-jog-x-minus">X-</button></td>
+                <td></td>
+                <td><button type="button" class="btn btn-primary btn-jog-xy"" id="btn-jog-x-plus">X+</button></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td><button type="button" class="btn btn-primary btn-jog-xy"" id="btn-jog-y-minus">Y-</button></td>
+                <td></td>
+              </tr>
+            </table>
+
+
+            <table class="jog-xy-speed">
+              <tr>
+                <td class="col-value">
+                  <select class="form-select" id="jox-xy-distance"></select>
+                </td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-0">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-1">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-2">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-3">x</button></td>
+              </tr>
+              <tr>
+                <td class="col-value">
+                  <!-- <button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-plus">+</button> -->
+                </td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-4">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-5">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-6">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-7">x</button></td>
+              </tr>
+              <tr>
+                <td class="col-value">
+                  <!-- <button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-minus">-</button> -->
+                </td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-8">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-9">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-10">x</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-xy" id="btn-jog-xy-11">x</button></td>
+              </tr>
+            </table>
+
+
+            
+          </div>
+          <div class="z-panel">
+
+            <table class="jog-z-pendant">
+              <tr>
+                <td><button type="button" class="btn btn-primary btn-jog-z"  id="btn-jog-z-plus">Z+</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <select class="form-select" id="jox-z-distance">
+                  </select>                
+                </td>
+              </tr>
+              
+            <tr>
+                <td><button type="button" class="btn btn-primary btn-jog-z" id="btn-jog-z-minus">Z-</button></td>
+              </tr>
+            </table>
+
+            <table class="jog-z-speed">
+              <tr>
+                <td><button type="button" class="btn btn-secondary btn-jog-z" id="btn-jog-z-0">50</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-z" id="btn-jog-z-1">10</button></td>
+              </tr>
+              <tr>
+                <td><button type="button" class="btn btn-secondary btn-jog-z" id="btn-jog-z-2">5</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-z" id="btn-jog-z-3">1</button></td>
+              </tr>
+              <tr>
+                <td><button type="button" class="btn btn-secondary btn-jog-z" id="btn-jog-z-4">0.5</button></td>
+                <td><button type="button" class="btn btn-secondary btn-jog-z" id="btn-jog-z-5">0.1</button></td>
+              </tr>
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="tab-content" id="tab-gcode">
+
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-12">
+            <div class="input-group mb-3">
+              <!-- <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2"> -->
+              <select class="form-select" data-name="select-file">
+                <option selected>Load GCode File</option>
+              </select>
+              <button class="btn btn-outline-secondary" type="button" id="refresh-files">&nbsp;<i class="fas fa-sync-alt"></i>&nbsp;</button>
+              <button type="button" class="btn btn-outline-secondary" id="load_file"><i class="fas fa-upload"></i> Load</button>
+            </div>          
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <div class="label">Received / Total</div>
+            <div class="cell-value" id="gcode_lines">--</div>
+            <div class="label">Start Time</div>
+            <div class="cell-value" id="gcode_start">--</div>
+            <div class="label">Finish Time</div>
+            <div class="cell-value" id="gcode_finish">--</div>
+            <div class="label">Elapsed Time</div>
+            <div class="cell-value" id="gcode_elapsed">--</div>
+            <div class="label">Remaining Time</div>
+            <div class="cell-value" id="gcode_remaining">--</div>
+          </div>
+          <div class="col-4">
+              <textarea class="rounded gcode" id="gcode" placeholder="GCode File Display" spellcheck="false" readonly></textarea>
+          </div>
+          <div class="col-5">
+            <canvas id="small-toolpath" class="rounded previewer"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-content" id="tab-mdi">
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-4">
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="GCode" id="mditext0">
+              <!-- <button class="btn btn-outline-secondary" type="button" id="btn-mdi-kb-m0"><i class="fas fa-fw fa-keyboard"></i></button> -->
+              <button class="btn btn-outline-secondary" type="button" id="btn-mditext0"><i class="fas fa-upload"></i></button>
+            </div>
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="GCode" id="mditext1">
+              <!-- <button class="btn btn-outline-secondary" type="button" id="btn-mdi-kb-m1"><i class="fas fa-fw fa-keyboard"></i></button> -->
+              <button class="btn btn-outline-secondary" type="button" id="btn-mditext1"><i class="fas fa-upload"></i></button>
+            </div>
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="GCode" id="mditext2">
+              <!-- <button class="btn btn-outline-secondary" type="button" id="btn-mdi-kb-m2"><i class="fas fa-fw fa-keyboard"></i></button> -->
+              <button class="btn btn-outline-secondary" type="button" id="btn-mditext2"><i class="fas fa-upload"></i></button>
+            </div>
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="GCode" id="mditext3">
+              <!-- <button class="btn btn-outline-secondary" type="button" id="btn-mdi-kb-m3"><i class="fas fa-fw fa-keyboard"></i></button> -->
+              <button class="btn btn-outline-secondary" type="button" id="btn-mditext3"><i class="fas fa-upload"></i></button>
+            </div>
+
+            <div class="input-group">
+              <input type="text" class="form-control" value="[M3] Spindle On" readonly>
+              <button class="btn btn-outline-secondary" type="button" id="btn-mditextm4"><i class="fas fa-fw fa-sync-alt"></i></button>
+            </div>
+
+            <div class="input-group">
+              <input type="text" class="form-control" value="[M5] Spindle Off" readonly>
+              <button class="btn btn-outline-secondary" type="button" id="btn-mditextm5"><i class="fas fa-fw fa-power-off"></i></button>
+            </div>
+
+          </div>
+          <div class="col-8">
+            <textarea class="messages rounded" id="messages" rows="2" spellcheck="false" readonly>Serial Messages</textarea>
+          </div>
+        </div>
+
+      </div>
+
+
+
+    </div>
+    
+  </div>
+
+</div>
+
+<div id="text-keyboard" class="modal-keyboard">
+  <div class="window rounded">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="float-end">
+            <a href="#" class="dismiss"><i class="fas fa-times"></i></a>
+          </div>
+            <div class="label">Set X</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <input type="text" class="form-control mb-2 mt-2 modal-input">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 mb-2">
+          <div class="text-keyboard-instance"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="numpad-keyboard" class="modal-keyboard">
+  <div class="window rounded">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="float-end">
+            <a href="#" class="dismiss"><i class="fas fa-times"></i></a>
+          </div>
+            <div class="label">Numpad</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <input type="text" id="numpad-keyboard-input" class="form-control mb-2 mt-2 modal-input">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 mb-2">
+          <div class="numpad-keyboard-instance"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="config.js"></script>
+<script src="dist/bundle.js"></script>
+
+</body>
+
+
+</html>
