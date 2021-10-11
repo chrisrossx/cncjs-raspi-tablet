@@ -83,8 +83,6 @@ export class Connection{
             $('[data-route="connection"] [data-name="btn-open"]').prop('disabled',true);
             $('[data-route="connection"] [data-name="btn-close"]').prop('disabled',false);
             $("#connection-back").removeClass("hidden");
-            console.log("what what");
-            console.log(this);
             this.clear_connection_error();
         
             Cookies.set('cnc.controllerType', controllerType, {expires: 365});
