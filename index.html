@@ -364,14 +364,15 @@
                 <option selected>Load GCode File</option>
               </select>
               <button class="btn btn-outline-secondary" type="button" id="refresh-files">&nbsp;<i class="fas fa-sync-alt"></i>&nbsp;</button>
-              <button type="button" class="btn btn-outline-secondary" id="load_file"><i class="fas fa-upload"></i> Load</button>
+              <!-- <button type="button" class="btn btn-outline-secondary" id="load-file"><i class="fas fa-upload"></i> Load</button> -->
+              <button type="button" class="btn btn-outline-secondary" id="unload-file">Unload</button>
             </div>          
           </div>
         </div>
         <div class="row">
           <div class="col-3">
             <div class="label">Received / Total</div>
-            <div class="cell-value" id="gcode_lines">--</div>
+            <div class="cell-value" id="gcode_lines">-- / --</div>
             <div class="label">Start Time</div>
             <div class="cell-value" id="gcode_start">--</div>
             <div class="label">Finish Time</div>

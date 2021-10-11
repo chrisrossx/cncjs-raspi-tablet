@@ -57,6 +57,10 @@ export class Machine {
         this.application.controller.on('sender:status', (data) => this.on_sender_status(data)); 
         this.application.controller.on('gcode:load', (name, gcode) => this.on_gcode_load(name, gcode));
         this.application.controller.on('serialport:read', (data) => this.on_serialport_read(data));
+
+        this.application.controller.on('gcode:unload', ()=>{
+            this.initState();
+        });
     }
     
     on_tinyg_state(data) {
@@ -233,6 +237,7 @@ export class Machine {
         var oldMachineWorkflow = this.machineWorkflow;
         this.machineWorkflow = MACHINE_STOP;
         this.receivedLines = 0;
+        this.totalLines = gcode.split(/\r?\n/).length - 1;
         this.application.workspaceView.update();
         this.machineWorkflow = oldMachineWorkflow;
         this.application.workspaceView.showGCode(name, gcode);
@@ -450,15 +455,22 @@ export class Machine {
         this.application.controller.command('gcode:start')
     }
 
-    pauseGCode = function() {
+    pauseGCode() {
         this.application.controller.command('gcode:pause');
     }
     
-    resumeGCode = function() {
+    resumeGCode() {
         this.application.controller.command('gcode:resume');
     }
     
-    stopGCode = function() {
+    unloadGCode() {
+        console.log("unloadGCode");
+        this.application.controller.command('gcode:unload');
+        this.application.machine.totalLines = null;
+        this.application.machine.receivedLines = null;
+    }
+    
+    stopGCode() {
         this.userStopRequested = true;
         this.application.controller.command('gcode:stop', { force: true })
     }
@@ -493,8 +505,13 @@ export class Machine {
     initState() {
         // Select the "Load GCode File" heading instead of any file
         this.application.workspaceView.showGCode('', '');
+        this.filename = '';
         this.oldFilename = '';
         this.running = false;
+        this.elapsedTime = 0;
+        this.remainingTime = 0;
+        this.startTime = 0;
+        this.finishTime = 0;
         this.userStopRequested = false;
         this.oldState = null;
         this.probing = false;

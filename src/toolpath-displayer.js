@@ -345,6 +345,15 @@ $(function() {
 
     var offset;
 
+    ToolpathDisplayer.prototype.clearToolpath = function() {
+        // Reset the transform and clear the canvas
+        tp.setTransform(1,0,0,1,0,0);
+        tp.fillStyle = "white";
+        tp.fillRect(0, 0, canvas.width, canvas.height);
+        toolSave = null;
+    };
+
+
     ToolpathDisplayer.prototype.showToolpath = function(gcode, wpos, mpos) {
         var inInches = $('[data-route="workspace"] [id="units"]').text() != 'mm ';
 

@@ -34,6 +34,9 @@ export class WorkspaceView {
 
         $('#refresh-files').on('click', () => this.getFileList());
         $('#load-file').on('click', () => this.loadGCode());
+        $('#unload-file').on('click', () => {
+            this.application.machine.unloadGCode();
+        })
 
         $("#btn-mditext0").on('click', () => this.on_mdi('#mditext0'));
         $("#btn-mditext1").on('click', () => this.on_mdi('#mditext1'));
@@ -170,12 +173,15 @@ export class WorkspaceView {
             var basename = name.split('/').slice(-1)[0];
             $('[data-route="workspace"] select[data-name="select-file"]').val(basename);
         } else {
-            // $('[data-route="workspace"] select[data-name="select-file"]')[0][0].selected = true;
+            $('[data-route="workspace"] select[data-name="select-file"]').val($('[data-route="workspace"] select[data-name="select-file"] option:first').val());
+            $("#target").val($("#target option:first").val());
         }
 
         $('[data-route="workspace"] [id="gcode"]').text(gcode);
         if (this.application.machine.gCodeLoaded) {
             window.displayer.showToolpath(gcode, this.application.machine.wpos, this.application.machine.mpos);
+        }else{
+            window.displayer.clearToolpath();
         }
         if (this.application.machine.machineWorkflow != MACHINE_STALL) {
             this.update();
@@ -419,23 +425,44 @@ export class WorkspaceView {
     }
 
     update_runtime(){
-        
-        var elapsedTime = this.formatElapsedTime(this.application.machine.elapsedTime);
-        $('[data-route="workspace"] [id="runtime"]').text(elapsedTime);
-        $('[data-route="workspace"] [id="gcode_elapsed"]').text(elapsedTime);
-
-        var start = new Date(this.application.machine.startTime);
-        $('[data-route="workspace"] [id="gcode_start"]').text(dateFormat(start, "HH:mm:ss"));
-        $('[data-route="workspace"] [id="gcode_remaining"]').text(this.formatElapsedTime(this.application.machine.remainingTime));
-        $('[data-route="workspace"] [id="gcode_finish"]').text(this.formatElapsedTime(this.application.machine.finishTime));
-
-        if (this.application.machine.machineWorkflow == MACHINE_RUN || this.application.machine.machineWorkflow == MACHINE_HOLD || this.application.machine.machineWorkflow == MACHINE_STOP) {
-            $('[data-route="workspace"] [id="line"]').text(this.application.machine.receivedLines);
-            this.scrollToLine(this.application.machine.receivedLines);
-
-            var gcode_lines = this.numberWithCommas(this.application.machine.receivedLines) + " / " + this.numberWithCommas(this.application.machine.totalLines)
+        if(this.application.machine.filename == ''){
+            $('[data-route="workspace"] [id="gcode_lines"]').text("-- / --");
+            
+            $('[data-route="workspace"] [id="runtime"]').text("--");
+            $('[data-route="workspace"] [id="gcode_elapsed"]').text("--");
+            
+            $('[data-route="workspace"] [id="gcode_start"]').text("--");
+            $('[data-route="workspace"] [id="gcode_remaining"]').text("--");
+            $('[data-route="workspace"] [id="gcode_finish"]').text("--");
+            
+            
+        }else{
+            
+            var elapsedTime = this.formatElapsedTime(this.application.machine.elapsedTime);
+            console.log(this.application.machine.elapsedTime);
+            $('[data-route="workspace"] [id="runtime"]').text(elapsedTime);
+            $('[data-route="workspace"] [id="gcode_elapsed"]').text(elapsedTime);
+            
+            if(this.application.machine.startTime == 0){
+                $('[data-route="workspace"] [id="gcode_start"]').text('--');
+            }else{
+                var start = new Date(this.application.machine.startTime);
+                $('[data-route="workspace"] [id="gcode_start"]').text(dateFormat(start, "HH:mm:ss"));
+            }
+            $('[data-route="workspace"] [id="gcode_remaining"]').text(this.formatElapsedTime(this.application.machine.remainingTime));
+            $('[data-route="workspace"] [id="gcode_finish"]').text(this.formatElapsedTime(this.application.machine.finishTime));
+            
+            if (this.application.machine.machineWorkflow == MACHINE_RUN || this.application.machine.machineWorkflow == MACHINE_HOLD || this.application.machine.machineWorkflow == MACHINE_STOP) {
+                // var receivedLines = this.application.machine.receivedLines == 0 ? "--" : ;
+                this.scrollToLine(this.application.machine.receivedLines);
+                
+                var gcode_lines =  this.numberWithCommas(this.application.machine.receivedLines) + " / " + this.numberWithCommas(this.application.machine.totalLines)
+                $('[data-route="workspace"] [id="gcode_lines"]').text(gcode_lines);
+                
+            }
+            var gcode_lines =  this.numberWithCommas(this.application.machine.receivedLines) + " / " + this.numberWithCommas(this.application.machine.totalLines)
             $('[data-route="workspace"] [id="gcode_lines"]').text(gcode_lines);
-    
+            $('[data-route="workspace"] [id="line"]').text(this.application.machine.receivedLines);
         }
     }
 
