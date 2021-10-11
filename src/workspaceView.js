@@ -40,14 +40,14 @@ export class WorkspaceView {
         $("#btn-mditext2").on('click', () => this.on_mdi('#mditext2'));
         $("#btn-mditext3").on('click', () => this.on_mdi('#mditext3'));
 
-        this.el.mdi_text[0].on('click', () => this.on_mdi_text_click(0));
-        this.el.mdi_text[1].on('click', () => this.on_mdi_text_click(1));
-        this.el.mdi_text[2].on('click', () => this.on_mdi_text_click(2));
-        this.el.mdi_text[3].on('click', () => this.on_mdi_text_click(3));
-        this.el.wpos.X.on('click', () => this.on_axis_text_click("X"));
-        this.el.wpos.Y.on('click', () => this.on_axis_text_click("Y"));
-        this.el.wpos.Z.on('click', () => this.on_axis_text_click("Z"));
-        this.el.wpos.A.on('click', () => this.on_axis_text_click("A"));
+        this.el.mdi_text[0].on('click', (e) => this.on_mdi_text_click(e, 0));
+        this.el.mdi_text[1].on('click', (e) => this.on_mdi_text_click(e, 1));
+        this.el.mdi_text[2].on('click', (e) => this.on_mdi_text_click(e, 2));
+        this.el.mdi_text[3].on('click', (e) => this.on_mdi_text_click(e, 3));
+        this.el.wpos.X.on('click', (e) => this.on_axis_text_click(e, "X"));
+        this.el.wpos.Y.on('click', (e) => this.on_axis_text_click(e, "Y"));
+        this.el.wpos.Z.on('click', (e) => this.on_axis_text_click(e, "Z"));
+        this.el.wpos.A.on('click', (e) => this.on_axis_text_click(e, "A"));
  
         $("#btn-mditextm4").on('click', () => {this.application.machine.MDIcmd("M3")});
         $("#btn-mditextm5").on('click', () => {this.application.machine.MDIcmd("M5")});
@@ -79,8 +79,11 @@ export class WorkspaceView {
 
     }
 
-    on_axis_text_click(axis) {
-        // TODO, Verify if clickable or not
+    on_axis_text_click(event, axis) {
+        if(this.is_clickable() == false){
+            event.currentTarget.blur();
+            return false;
+        }
         var label = "Set Axis " + axis;
         var value = this.el.wpos[axis].val();
 
@@ -97,8 +100,11 @@ export class WorkspaceView {
     }
     
 
-    on_mdi_text_click(index) {
-        // TODO, Verify if clickable or not
+    on_mdi_text_click(event, index) {
+        if(this.is_clickable() == false){
+            event.currentTarget.blur();
+            return false;
+        }
         var label = "Set MDI Code " + index;
         var value = this.el.mdi_text[index].val();
         this.application.keyboard.show(label, value,
@@ -358,8 +364,12 @@ export class WorkspaceView {
     }
 
 
+    is_clickable(){
+        return this.application.machine.machineWorkflow <= MACHINE_IDLE
+    }
+
     update_clickable(){
-        var cannotClick = this.application.machine.machineWorkflow > MACHINE_IDLE;
+        var cannotClick = !this.is_clickable();
 
         $('[data-route="workspace"] .axis-button').prop('disabled', cannotClick);
         $('[data-route="workspace"] #tab-mdi .btn').prop('disabled', cannotClick);
