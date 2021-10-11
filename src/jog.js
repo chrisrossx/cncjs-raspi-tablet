@@ -46,7 +46,7 @@ export class JogButtons{
 
     }
 
-    #paramsTogcode(params){
+    paramsTogcode(params){
         params = params || {};
         var args = [];
         Object.entries(params).forEach((entry) => {
@@ -56,22 +56,22 @@ export class JogButtons{
         return s;
     }
 
-    #jog(params) {
+    jog(params) {
         if (this.application.machine.modal.distance == 'G90') {
             this.application.controller.command('gcode', 'G91'); // relative distance
-            this.application.controller.command('gcode', 'G0 ' + this.#paramsTogcode(params));
+            this.application.controller.command('gcode', 'G0 ' + this.paramsTogcode(params));
             this.application.controller.command('gcode', 'G90'); // absolute distance
         } else {
-            this.application.controller.command('gcode', 'G0 ' + this.#paramsTogcode(params));
+            this.application.controller.command('gcode', 'G0 ' + this.paramsTogcode(params));
         }
     };
 
-    #move(params) {
+    move(params) {
         if (this.application.machine.modal.distance == 'G90') {
-            this.application.controller.command('gcode', 'G0 ' + this.#paramsTogcode(params));
+            this.application.controller.command('gcode', 'G0 ' + this.paramsTogcode(params));
         } else {
             this.application.controller.command('gcode', 'G90'); // absolute distance
-            this.application.controller.command('gcode', 'G0 ' + this.#paramsTogcode(params));
+            this.application.controller.command('gcode', 'G0 ' + this.paramsTogcode(params));
             this.application.controller.command('gcode', 'G91'); // relative distance
         }
     };
@@ -84,20 +84,20 @@ export class JogButtons{
         var fn = {
             'G28': () => this.application.controller.command('gcode', 'G28'),
             'G30': () => this.application.controller.command('gcode', 'G30'),
-            'X0Y0Z0': () => this.#move({X: 0, Y: 0, Z: 0}),
-            'X0': () => this.#move({X: 0}),
-            'Y0': () => this.#move({Y: 0}),
-            'Z0': () => this.#move({Z: 0}),
-            'X-Y+': () => this.#jog({ X: -xy_distance, Y: xy_distance }),
-            'X+Y+': () => this.#jog({ X: xy_distance, Y: xy_distance }),
-            'X-Y-': () => this.#jog({ X: -xy_distance, Y: -xy_distance }),
-            'X+Y-': () => this.#jog({ X: xy_distance, Y: -xy_distance }),
-            'X-': () => this.#jog({ X: -xy_distance }),
-            'X+': () => this.#jog({ X: xy_distance }),
-            'Y-': () => this.#jog({ Y: -xy_distance }),
-            'Y+': () => this.#jog({ Y: xy_distance }),
-            'Z-': () => this.#jog({ Z: -z_distance }),
-            'Z+': () => this.#jog({ Z: z_distance }),
+            'X0Y0Z0': () => this.move({X: 0, Y: 0, Z: 0}),
+            'X0': () => this.move({X: 0}),
+            'Y0': () => this.move({Y: 0}),
+            'Z0': () => this.move({Z: 0}),
+            'X-Y+': () => this.jog({ X: -xy_distance, Y: xy_distance }),
+            'X+Y+': () => this.jog({ X: xy_distance, Y: xy_distance }),
+            'X-Y-': () => this.jog({ X: -xy_distance, Y: -xy_distance }),
+            'X+Y-': () => this.jog({ X: xy_distance, Y: -xy_distance }),
+            'X-': () => this.jog({ X: -xy_distance }),
+            'X+': () => this.jog({ X: xy_distance }),
+            'Y-': () => this.jog({ Y: -xy_distance }),
+            'Y+': () => this.jog({ Y: xy_distance }),
+            'Z-': () => this.jog({ Z: -z_distance }),
+            'Z+': () => this.jog({ Z: z_distance }),
         }[command];
         fn && fn();
     }

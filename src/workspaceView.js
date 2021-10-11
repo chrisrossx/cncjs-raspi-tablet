@@ -80,6 +80,7 @@ export class WorkspaceView {
     }
 
     on_axis_text_click(axis) {
+        // TODO, Verify if clickable or not
         var label = "Set Axis " + axis;
         var value = this.el.wpos[axis].val();
 
@@ -97,6 +98,7 @@ export class WorkspaceView {
     
 
     on_mdi_text_click(index) {
+        // TODO, Verify if clickable or not
         var label = "Set MDI Code " + index;
         var value = this.el.mdi_text[index].val();
         this.application.keyboard.show(label, value,
@@ -175,7 +177,7 @@ export class WorkspaceView {
     }
     
 
-    #nthLineEnd(str, n){
+    nthLineEnd(str, n){
         if (n <= 0)
             return 0;
         var L= str.length, i= -1;
@@ -187,7 +189,7 @@ export class WorkspaceView {
     }
     
 
-    #scrollToLine(lineNumber) {
+    scrollToLine(lineNumber) {
         var gCodeLines = $('[data-route="workspace"] [id="gcode"]');
         var lineHeight = parseInt(gCodeLines.css('line-height'));
         var gCodeText = gCodeLines.text();
@@ -201,7 +203,7 @@ export class WorkspaceView {
             start = 0;
             end = 1;
         } else {
-            start = (lineNumber == 1) ? 0 : start = this.#nthLineEnd(gCodeText, lineNumber-1) + 1;
+            start = (lineNumber == 1) ? 0 : start = this.nthLineEnd(gCodeText, lineNumber-1) + 1;
             end = gCodeText.indexOf("\n", start);
         }
       
@@ -211,7 +213,7 @@ export class WorkspaceView {
       
 
 
-    #setButton(name, isEnabled, color, text) {
+    setButton(name, isEnabled, color, text) {
         var button = $('[data-route="workspace"] ' + name);
         button.prop('disabled', !isEnabled);
         button.removeClass('btn-primary btn-light btn-danger');
@@ -229,8 +231,8 @@ export class WorkspaceView {
         button.prop('innerText', text);
     }
         
-    #setLeftButton(isEnabled, color, text, click) {
-        this.#setButton('#btn-start', isEnabled, color, text);
+    setLeftButton(isEnabled, color, text, click) {
+        this.setButton('#btn-start', isEnabled, color, text);
         this.leftButtonHandler = click;
     }
     
@@ -240,8 +242,8 @@ export class WorkspaceView {
         }
     }
     
-    #setRightButton(isEnabled, color, text, click) {
-        this.#setButton('#btn-pause', isEnabled, color, text);
+    setRightButton(isEnabled, color, text, click) {
+        this.setButton('#btn-pause', isEnabled, color, text);
         this.rightButtonHandler = click;
     }
     
@@ -252,7 +254,7 @@ export class WorkspaceView {
     }
    
 
-    #update_dwpos(){
+    update_dwpos(){
         var digits = this.application.machine.modal.units == 'G20' ? 4: 3;
         var dwpos = {
             x: Number(this.application.machine.wpos.x).toFixed(digits),
@@ -269,7 +271,7 @@ export class WorkspaceView {
         $('[data-route="workspace"] [data-name="wpos-label"]').text(this.application.machine.modal.wcs);
     }
 
-    #update_active_state(){
+    update_active_state(){
         if (this.application.machine.machineWorkflow == MACHINE_RUN) {
             var rateText = this.application.machine.modal.units == 'G21' ? Number(this.application.machine.velocity).toFixed(0) + ' mm/min' : Number(this.application.machine.velocity).toFixed(2) + ' in/min';
             $('[data-route="workspace"] [data-name="active-state"]').val(rateText);
@@ -286,37 +288,37 @@ export class WorkspaceView {
         }
     }
 
-    #update_state_buttons(){
+    update_state_buttons(){
         switch (this.application.machine.machineWorkflow) {
             case MACHINE_STALL:
-                this.#setLeftButton(true, 'gray', 'Start', null);
-                this.#setRightButton(false, 'gray', 'Pause', null);
+                this.setLeftButton(true, 'gray', 'Start', null);
+                this.setRightButton(false, 'gray', 'Pause', null);
                 break;
             case MACHINE_STOP:
             case MACHINE_IDLE:
                 if (this.application.machine.gCodeLoaded) {
                     // A GCode file is ready to go
-                    this.#setLeftButton(true, 'green', 'Start', () => this.application.machine.runGCode());
-                    this.#setRightButton(false, 'gray', 'Pause', null);
+                    this.setLeftButton(true, 'green', 'Start', () => this.application.machine.runGCode());
+                    this.setRightButton(false, 'gray', 'Pause', null);
                 } else {
                     // Can't start because no GCode to run
-                    this.#setLeftButton(false, 'gray', 'Start', null);
-                    this.#setRightButton(false, 'gray', 'Pause', null);
+                    this.setLeftButton(false, 'gray', 'Start', null);
+                    this.setRightButton(false, 'gray', 'Pause', null);
                 }
                 break;
             case MACHINE_HOLD:
-                this.#setLeftButton(true, 'green', 'Resume', this.application.machine.resumeGCode);
-                this.#setRightButton(true, 'red', 'Stop', this.application.machine.stopGCode);
+                this.setLeftButton(true, 'green', 'Resume', this.application.machine.resumeGCode);
+                this.setRightButton(true, 'red', 'Stop', this.application.machine.stopGCode);
                 break;
             case MACHINE_RUN:
-                this.#setLeftButton(false, 'gray', 'Start', null);
-                this.#setRightButton(true, 'red', 'Pause', this.application.machine.pauseGCode);
+                this.setLeftButton(false, 'gray', 'Start', null);
+                this.setRightButton(true, 'red', 'Pause', this.application.machine.pauseGCode);
                 break;
         }
 
     }
 
-    #update_units(){
+    update_units(){
         var newUnits = this.application.machine.modal.units == 'G21' ? 'mm ' : 'Inch ';
         if ($('[data-route="workspace"] [id="units"]').text() != newUnits) {
             $('[data-route="workspace"] [id="units"]').text(newUnits);
@@ -325,7 +327,7 @@ export class WorkspaceView {
         $('[data-route="workspace"] [id="units"]').prop('disabled', this.application.connection.controllerType == 'Marlin');
     }
 
-    #update_spindle_speed(){
+    update_spindle_speed(){
         if (this.application.machine.spindleSpeed) {
             var spindleText = 'Off';
             switch (this.application.machine.spindleDirection) {
@@ -347,7 +349,7 @@ export class WorkspaceView {
 
     }
 
-    #update_distance(){
+    update_distance(){
         
         var distanceText = this.application.machine.modal.distance == 'G90'
         ? this.application.machine.modal.distance
@@ -356,7 +358,7 @@ export class WorkspaceView {
     }
 
 
-    #update_clickable(){
+    update_clickable(){
         var cannotClick = this.application.machine.machineWorkflow > MACHINE_IDLE;
 
         $('[data-route="workspace"] .axis-button').prop('disabled', cannotClick);
@@ -373,7 +375,7 @@ export class WorkspaceView {
     }
 
 
-    #formatElapsedTime(time){
+    formatElapsedTime(time){
         var elapsed = time;
         if (elapsed < 0)
             elapsed = 0;
@@ -402,32 +404,32 @@ export class WorkspaceView {
         }
     }
 
-    #numberWithCommas(x) {
+    numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    #update_runtime(){
+    update_runtime(){
         
-        var elapsedTime = this.#formatElapsedTime(this.application.machine.elapsedTime);
+        var elapsedTime = this.formatElapsedTime(this.application.machine.elapsedTime);
         $('[data-route="workspace"] [id="runtime"]').text(elapsedTime);
         $('[data-route="workspace"] [id="gcode_elapsed"]').text(elapsedTime);
 
         var start = new Date(this.application.machine.startTime);
         $('[data-route="workspace"] [id="gcode_start"]').text(dateFormat(start, "HH:mm:ss"));
-        $('[data-route="workspace"] [id="gcode_remaining"]').text(this.#formatElapsedTime(this.application.machine.remainingTime));
-        $('[data-route="workspace"] [id="gcode_finish"]').text(this.#formatElapsedTime(this.application.machine.finishTime));
+        $('[data-route="workspace"] [id="gcode_remaining"]').text(this.formatElapsedTime(this.application.machine.remainingTime));
+        $('[data-route="workspace"] [id="gcode_finish"]').text(this.formatElapsedTime(this.application.machine.finishTime));
 
         if (this.application.machine.machineWorkflow == MACHINE_RUN || this.application.machine.machineWorkflow == MACHINE_HOLD || this.application.machine.machineWorkflow == MACHINE_STOP) {
             $('[data-route="workspace"] [id="line"]').text(this.application.machine.receivedLines);
-            this.#scrollToLine(this.application.machine.receivedLines);
+            this.scrollToLine(this.application.machine.receivedLines);
 
-            var gcode_lines = this.#numberWithCommas(this.application.machine.receivedLines) + " / " + this.#numberWithCommas(this.application.machine.totalLines)
+            var gcode_lines = this.numberWithCommas(this.application.machine.receivedLines) + " / " + this.numberWithCommas(this.application.machine.totalLines)
             $('[data-route="workspace"] [id="gcode_lines"]').text(gcode_lines);
     
         }
     }
 
-    #update_gcode(){
+    update_gcode(){
         window.displayer.reDrawTool(this.application.machine.modal, this.application.machine.mpos);
     }
 
@@ -436,15 +438,15 @@ export class WorkspaceView {
         //	canStart = false;
         //}
 
-        this.#update_dwpos();
-        this.#update_active_state();
-        this.#update_state_buttons();
-        this.#update_units();
-        this.#update_spindle_speed();
-        this.#update_distance();
-        this.#update_clickable();
-        this.#update_runtime();
-        this.#update_gcode();
+        this.update_dwpos();
+        this.update_active_state();
+        this.update_state_buttons();
+        this.update_units();
+        this.update_spindle_speed();
+        this.update_distance();
+        this.update_clickable();
+        this.update_runtime();
+        this.update_gcode();
 
 
 

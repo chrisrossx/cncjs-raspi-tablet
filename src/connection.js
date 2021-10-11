@@ -83,7 +83,9 @@ export class Connection{
             $('[data-route="connection"] [data-name="btn-open"]').prop('disabled',true);
             $('[data-route="connection"] [data-name="btn-close"]').prop('disabled',false);
             $("#connection-back").removeClass("hidden");
-            this.#clear_connection_error();
+            console.log("what what");
+            console.log(this);
+            this.clear_connection_error();
         
             Cookies.set('cnc.controllerType', controllerType, {expires: 365});
             Cookies.set('cnc.port', port, {expires: 365});
@@ -128,19 +130,19 @@ export class Connection{
         
             console.log('Error opening serial port \'' + port + '\'');
             var msg = "Error opening serial port \'" + port + "\'";
-            this.#show_connection_error(msg)
+            this.show_connection_error(msg)
     
         });
         
     }
 
-    #show_connection_error(message){
+    show_connection_error(message){
         var el = $("#connection-error");
         el.html(message);
         el.removeClass("hidden")
     }
     
-    #clear_connection_error(){
+    clear_connection_error(){
         var el = $("#connection-error");
         el.html('');
         el.addClass("hidden")

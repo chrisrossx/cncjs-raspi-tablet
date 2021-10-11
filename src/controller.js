@@ -17,7 +17,7 @@ export class CNCJSController {
 
     constructor(){
 
-        this.token = this.#getToken();
+        this.token = this.getToken();
         // WebSocket
         this.socket = window.io({
             query: 'token=' + this.token,
@@ -62,7 +62,7 @@ export class CNCJSController {
             'Marlin:state': [],
             'Marlin:settings': []
         };
-        this.#bindCallbacks();
+        this.bindCallbacks();
 
         // this.socket.on('connect', function() {
         //     console.log("CNCJSController.socket.connect");
@@ -78,7 +78,7 @@ export class CNCJSController {
     }
 
 
-    #bindCallbacks() {
+    bindCallbacks() {
         Object.keys(this.callbacks).forEach(function(eventName) {
             this.socket.on(eventName, function() {
                 var args = Array.prototype.slice.call(arguments);
@@ -143,8 +143,8 @@ export class CNCJSController {
     }
 
 
-    #getToken() {
-        var params = this.#parseParams(window.location.search.slice(1));
+    getToken() {
+        var params = this.parseParams(window.location.search.slice(1));
         var token = params.token || '';
         
         if (!token) {
@@ -166,7 +166,7 @@ export class CNCJSController {
         return token;
     }
 
-    #parseParams(str) {
+    parseParams(str) {
         return str.split('&').reduce(function (params, param) {
             if (!param) {
                 return params;
