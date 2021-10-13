@@ -303,7 +303,7 @@ export class WorkspaceView {
     update_state_buttons(){
         switch (this.application.machine.machineWorkflow) {
             case MACHINE_STALL:
-                this.setLeftButton(true, 'gray', 'Start', null);
+                this.setLeftButton(false, 'gray', 'Start', null);
                 this.setRightButton(false, 'gray', 'Pause', null);
                 break;
             case MACHINE_STOP:
