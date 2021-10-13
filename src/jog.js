@@ -112,13 +112,13 @@ export class JogButtons{
 
     set_values(){
 
-        var set = function(btns, btns_mm, btns_inch, select, jog_mm, jog_inch, select_default_mm, select_default_inch){
+        var set = function(btns, btns_mm, btns_inch, select, jog_mm, jog_inch, select_default_mm, select_default_inch, on_click){
             var i = 0;
             btns.forEach((btn) => {
                 let val = this.application.machine.modal.units == "G21" ? btns_mm[i] : btns_inch[i];
                 btn.html(val);
                 btn.off('click');
-                btn.on('click', () => this.on_xy_btn_click(val));
+                btn.on('click', () => on_click(val));
                 i++;
             });
 
@@ -138,7 +138,8 @@ export class JogButtons{
             window.jog_xy_select_mm,
             window.jog_xy_select_inch,
             window.jog_xy_select_mm_default,
-            window.jog_xy_select_inch_default
+            window.jog_xy_select_inch_default,
+            (val) => {this.on_xy_btn_click(val)}
         );
         
         set(this.el.z_distance_btns,
@@ -148,10 +149,10 @@ export class JogButtons{
             window.jog_z_select_mm,
             window.jog_z_select_inch,
             window.jog_z_select_mm_default,
-            window.jog_z_select_inch_default
+            window.jog_z_select_inch_default,
+            (val) => {this.on_z_btn_click(val)}
         );
 
     }
-
 
 }
