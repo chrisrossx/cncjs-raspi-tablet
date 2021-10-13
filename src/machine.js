@@ -536,6 +536,8 @@ export class Machine {
             if (this.senderHold && this.senderHoldReason !== '%wait') {
                stateName = this.senderHoldReason;
             }
+        } else if (stateName == 'Alarm') {
+            this.machineWorkflow = MACHINE_STALL;
         } else {
             console.log(stateName)
             this.machineWorkflow = MACHINE_RUN;
