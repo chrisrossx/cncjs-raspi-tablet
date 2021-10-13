@@ -464,7 +464,6 @@ export class Machine {
     }
     
     unloadGCode() {
-        console.log("unloadGCode");
         this.application.controller.command('gcode:unload');
         this.application.machine.totalLines = null;
         this.application.machine.receivedLines = null;
@@ -521,7 +520,6 @@ export class Machine {
     // and possibly adjusts stateName based on the state and the
     // reason for stopping.
     setMachineWorkflow(stateName) {
-        console.log(stateName)
         if (stateName == 'Idle') {
             this.machineWorkflow = MACHINE_IDLE;
             if (this.senderHold && this.senderHoldReason !== '%wait') {
@@ -539,7 +537,6 @@ export class Machine {
         } else if (stateName == 'Alarm') {
             this.machineWorkflow = MACHINE_STALL;
         } else {
-            console.log(stateName)
             this.machineWorkflow = MACHINE_RUN;
         }
 
@@ -553,14 +550,10 @@ export class Machine {
         this.mpos = status.mpos;
         this.wpos = status.wpos;
         
-
-
         // Grbl states are Idle, Run, Jog, Hold
         // The code used to allow click in Run state but that seems wrong
         // canClick = stateName == 'Idle';
-        console.log("renderGrblState", stateName)
         this.stateName = this.setMachineWorkflow(stateName);
-
 
         var parserstate = data.parserstate || {};
         if (parserstate.modal) {

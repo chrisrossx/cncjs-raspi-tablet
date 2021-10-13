@@ -301,8 +301,6 @@ export class WorkspaceView {
     }
 
     update_state_buttons(){
-        console.log(this.application.machine.machineWorkflow)
-        // return false;
         switch (this.application.machine.machineWorkflow) {
             case MACHINE_STALL:
                 this.setLeftButton(true, 'gray', 'Start', null);
@@ -442,7 +440,6 @@ export class WorkspaceView {
         }else{
             
             var elapsedTime = this.formatElapsedTime(this.application.machine.elapsedTime);
-            console.log(this.application.machine.elapsedTime);
             $('[data-route="workspace"] [id="runtime"]').text(elapsedTime);
             $('[data-route="workspace"] [id="gcode_elapsed"]').text(elapsedTime);
             
