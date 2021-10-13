@@ -17707,7 +17707,6 @@ readers do not read off random characters that represent icons */
  * Tab Panel
  */
 .tab-panel {
-  border-top: 2px solid #3d3d3d;
   position: absolute;
   z-index: 50;
   top: 150px;
@@ -17715,6 +17714,10 @@ readers do not read off random characters that represent icons */
   left: 0px;
   right: 0px;
   background-color: #979797;
+}
+.tab-panel .divider {
+  background-color: #000;
+  height: 2px;
 }
 .tab-panel .tabs {
   padding-top: 25px;

@@ -194,6 +194,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 .axis-panel {
     margin-top: 8px;
+    // border-bottom: 2px solid rgb(61, 61, 61);
 
     td {
         // border: 1px solid #000;
@@ -248,8 +249,6 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
  */
 
 .tab-panel {
-    // border-top: 2px solid rgb(61, 61, 61);
-    // box-shadow: -2px -2px 3px rgb(15, 15, 15);
 
     position: absolute;
     z-index: 50;
@@ -258,6 +257,12 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
     left: 0px;
     right: 0px;
     background-color: rgb(151, 151, 151);
+
+    .divider{
+        background-color: #000;
+        height: 2px;
+
+    }
 
     .tabs{
         padding-top: 25px;
