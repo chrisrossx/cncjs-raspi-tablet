@@ -14,7 +14,7 @@ export class Machine {
         this.running = false;
         this.userStopRequested = false;
         this.oldState = null;
-        this.probing = false;
+        this.probing = false; 
         this.savedGrblState;
         this.stateName;
         this.spindleSpeed;
@@ -521,6 +521,7 @@ export class Machine {
     // and possibly adjusts stateName based on the state and the
     // reason for stopping.
     setMachineWorkflow(stateName) {
+        console.log(stateName)
         if (stateName == 'Idle') {
             this.machineWorkflow = MACHINE_IDLE;
             if (this.senderHold && this.senderHoldReason !== '%wait') {
@@ -536,6 +537,7 @@ export class Machine {
                stateName = this.senderHoldReason;
             }
         } else {
+            console.log(stateName)
             this.machineWorkflow = MACHINE_RUN;
         }
 
@@ -554,6 +556,7 @@ export class Machine {
         // Grbl states are Idle, Run, Jog, Hold
         // The code used to allow click in Run state but that seems wrong
         // canClick = stateName == 'Idle';
+        console.log("renderGrblState", stateName)
         this.stateName = this.setMachineWorkflow(stateName);
 
 

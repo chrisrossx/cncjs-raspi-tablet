@@ -301,6 +301,8 @@ export class WorkspaceView {
     }
 
     update_state_buttons(){
+        console.log(this.application.machine.machineWorkflow)
+        // return false;
         switch (this.application.machine.machineWorkflow) {
             case MACHINE_STALL:
                 this.setLeftButton(true, 'gray', 'Start', null);
