@@ -434,6 +434,7 @@ export class WorkspaceView {
             $('[data-route="workspace"] [id="gcode_start"]').text("--");
             $('[data-route="workspace"] [id="gcode_remaining"]').text("--");
             $('[data-route="workspace"] [id="gcode_finish"]').text("--");
+            $('[data-route="workspace"] [id="line"]').text("--");
             
             
         }else{
