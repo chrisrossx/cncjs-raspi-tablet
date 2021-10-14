@@ -82,6 +82,10 @@ export class Connection{
         
             $('[data-route="connection"] [data-name="btn-open"]').prop('disabled',true);
             $('[data-route="connection"] [data-name="btn-close"]').prop('disabled',false);
+            $('[data-route="connection"] [data-name="baudrate"]').prop('disabled',true);
+            $('[data-route="connection"] [data-name="btn-ports-sync"]').prop('disabled',true);
+            $('[data-route="connection"] [data-name="port"]').prop('disabled',true);
+            $('[data-route="connection"] [data-name="controllerType"]').prop('disabled',true);
             $("#connection-back").removeClass("hidden");
             this.clear_connection_error();
         
@@ -113,6 +117,10 @@ export class Connection{
         
             $('[data-route="connection"] [data-name="btn-open"]').prop('disabled',false);
             $('[data-route="connection"] [data-name="btn-close"]').prop('disabled',true);
+            $('[data-route="connection"] [data-name="baudrate"]').prop('disabled',false);
+            $('[data-route="connection"] [data-name="btn-ports-sync"]').prop('disabled',false);
+            $('[data-route="connection"] [data-name="port"]').prop('disabled',false);
+            $('[data-route="connection"] [data-name="controllerType"]').prop('disabled',false);            
             $("#connection-back").addClass("hidden");
             $('[data-route="workspace"] [data-name="active-state"]').val('NoConnect');
             window.location = '#/connection';
