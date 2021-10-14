@@ -15,11 +15,28 @@ Features
 * Homing
 * Load and Execute programs from the CNCJS watch directory
 
+Additional Features / Improvements from the cncjs-shopflor-tablet project
+* Additiona machine state infromation on the GCode tab
+* Ability to unload gcode, or handle unload events from other loaded interfaces. 
+* Reset and Unlock buttons on the top NavBar when the state is in Alarm or Stall. 
+* Seperate Z Jog Distance buttons and pulldowns from the XY axis. 
+* User configurable Button and Pulldown values for metric and inch jog distances. 
+
+# Screen Shots
+
+![Jog Tab](/screenshot_jog.png)
+
+![Jog Tab](/screenshot_gcode.png)
+
+![Jog Tab](/screenshot_mdi.png)
+
+![Jog Tab](/screenshot_keyboard.png)
+
 # Starting Point
 
 This project started as a re-skinning of the official [shopfloor-tablet](https://github.com/cncjs/cncjs-shopfloor-tablet) UI from the [cncjs](https://cnc.js.org/) project.
 
-The code from cncjs-shopfloor-tablet has been refactored to use ES6 classes. 
+The code from cncjs-shopfloor-tablet has been refactored to use ES6 classes.
 
 # Limitations
 * This project has only been tested with Grbl. While the code for the other controllers has been copied from the cncjs-shopfloor-tablet, it has not been tested. 
@@ -29,6 +46,7 @@ The code from cncjs-shopfloor-tablet has been refactored to use ES6 classes.
 ## Kiosk Mode
 
 You can setup a browser to automatically be run in kiosk mode on startup of the Raspberry Pi. 
+* Starting the chromium browser in --kios mode, the fullscreen command in the Navbar menu will not work. 
 
 ## CNCJS Security Token Limitation 
 
