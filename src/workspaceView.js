@@ -449,8 +449,15 @@ export class WorkspaceView {
                 var start = new Date(this.application.machine.startTime);
                 $('[data-route="workspace"] [id="gcode_start"]').text(dateFormat(start, "HH:mm:ss"));
             }
+
             $('[data-route="workspace"] [id="gcode_remaining"]').text(this.formatElapsedTime(this.application.machine.remainingTime));
-            $('[data-route="workspace"] [id="gcode_finish"]').text(this.formatElapsedTime(this.application.machine.finishTime));
+
+            if(this.application.machine.finishTime == 0){
+                $('[data-route="workspace"] [id="gcode_finish"]').text('--');
+            }else{
+                var finish = new Date(this.application.machine.finishTime);
+                $('[data-route="workspace"] [id="gcode_finish"]').text(dateFormat(finish, "HH:mm:ss"));
+            }
             
             if (this.application.machine.machineWorkflow == MACHINE_RUN || this.application.machine.machineWorkflow == MACHINE_HOLD || this.application.machine.machineWorkflow == MACHINE_STOP) {
                 // var receivedLines = this.application.machine.receivedLines == 0 ? "--" : ;

@@ -15,9 +15,9 @@ export class CNCJSController {
 
 
 
-    constructor(){
+    constructor(default_token){
 
-        this.token = this.getToken();
+        this.token = this.getToken(default_token);
         // WebSocket
         this.socket = window.io({
             query: 'token=' + this.token,
@@ -143,42 +143,26 @@ export class CNCJSController {
     }
 
 
-    getToken() {
-        var params = this.parseParams(window.location.search.slice(1));
-        var token = params.token || '';
+    getToken(default_token) {
         
-        if (!token) {
+        if (!default_token) {
             try {
                 var cnc = {};
                 cnc = JSON.parse(localStorage.getItem('cnc') || {});
                 cnc.state = cnc.state || {};
                 cnc.state.session = cnc.state.session || {};
-                token = cnc.state.session.token || '';
-                // root.cnc.token = token;
+                var token = cnc.state.session.token || '';
+                return token;
                 // console.log("Found Token in localStorage")
             } catch (err) {
+                return default_token;
                 // Ignore error
             }
         }else{
+            return default_token
             // console.log("Found Token in url param")
         }
-
-        return token;
     }
-
-    parseParams(str) {
-        return str.split('&').reduce(function (params, param) {
-            if (!param) {
-                return params;
-            }
-            var paramSplit = param.split('=').map(function (value) {
-                return decodeURIComponent(value.replace('+', ' '));
-            });
-            params[paramSplit[0]] = paramSplit[1];
-            return params;
-        }, {});
-    };
-
 
     on(eventName, callback) {
         var callbacks = this.callbacks[eventName];

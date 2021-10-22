@@ -54,5 +54,14 @@ When the app is first loaded into a browser, it will redirect to the CNCJS user 
 
 For example:
 '''
-http://127.0.0.1:8000/raspi/#/connection?token=xxxxxx
+http://127.0.0.1:8000/raspi/?token=xxxxxx
+'''
+
+## Default Port for Connection Page
+
+You can set a port paramater on the loading URL, to set a default port to select in the Port Option Dialog on the Connection Page.
+
+For example:
+'''
+http://127.0.0.1:8000/raspi/#?port=COM10&token=xxxxxx
 '''

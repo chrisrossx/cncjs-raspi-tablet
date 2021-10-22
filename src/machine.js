@@ -452,6 +452,9 @@ export class Machine {
     
     runGCode() {
         this.running = true;
+        this.finishTime = 0;
+        this.startTime = 0;
+        this.remainingTime = 0;
         this.application.controller.command('gcode:start')
     }
 

@@ -3,8 +3,10 @@ import Cookies from 'js.cookie';
 
 export class Connection{
 
-    constructor(application){
+    constructor(application, default_port){
+
         this.application = application;
+        this.default_port = default_port;
         this.port = Cookies.get('cnc.port');
         this.baudrate = Cookies.get('cnc.baudrate');
         this.connected = false;
@@ -13,7 +15,9 @@ export class Connection{
 
         this.application.controller.on('serialport:list', (list) => {
             var $el = $('[data-route="connection"] select[data-name="port"]');
-        
+    
+            // var params = this.application.controller.parseParams(window.location.search.slice(1));
+            // var default_port = params.port || '';
     
             $el.empty();
             $.each(list, function(key, value) {
@@ -35,11 +39,14 @@ export class Connection{
             }
             if (this.port) {
                 $('[data-route="connection"] select[data-name="port"]').val(this.port);
+            }else{
+                $('[data-route="connection"] select[data-name="port"]').val(this.default_port);
+                // console.log("Found Port", this.default_port);
             }
             if (this.baudrate) {
                 $('[data-route="connection"] select[data-name="baudrate"]').val(this.baudrate);
             }
-        
+
         });     
         
         $('[data-route="connection"] [data-name="btn-ports-sync"]').on('click', () => {

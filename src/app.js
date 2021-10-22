@@ -19,9 +19,15 @@ window.$ = $;
 class Application {
 
     constructor() {
+
+        var params = this.parseParams(window.location.search.slice(1));
+        var default_token = params.token || '';
+        var default_port = params.port || '';
+        
+        window.history.replaceState(null, null, window.location.pathname);
       
-        this.controller = new CNCJSController();
-        this.connection = new Connection(this);
+        this.controller = new CNCJSController(default_token);
+        this.connection = new Connection(this, default_port);
         this.router = new Router(this);
         this.machine = new Machine(this);
         this.workspaceView = new WorkspaceView(this);
@@ -31,8 +37,6 @@ class Application {
         this.tabs = new Tabs();
         this.tabs.change("jog");
         this.jog = new JogButtons(this);
-
-
 
         this.controller.socket.on('error', function(){
             console.log("socket.io on 'error'");
@@ -51,6 +55,21 @@ class Application {
         });
 
     }
+
+
+    parseParams(str) {
+        return str.split('&').reduce(function (params, param) {
+            if (!param) {
+                return params;
+            }
+            var paramSplit = param.split('=').map(function (value) {
+                return decodeURIComponent(value.replace('+', ' '));
+            });
+            params[paramSplit[0]] = paramSplit[1];
+            return params;
+        }, {});
+    };
+
 
 
 }
