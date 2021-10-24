@@ -53,7 +53,6 @@ export class JogButtons{
             }else{
                 this.disable_jog = true;
             }
-            console.log("state", state, this.disable_jog);
         });
 
 
@@ -71,7 +70,6 @@ export class JogButtons{
                 this.el.jog_z_select.hide();
                 $(".jog-z-speed .btn-jog-z").hide();
             }
-            // this.application.workspaceView.update_clickable();
         });
 
 
