@@ -24,7 +24,7 @@ Additional Features / Improvements from the cncjs-shopflor-tablet project
 
 # Screen Shots
 
-![Jog Tab](/screenshot_jog.png)
+![Jog Tab](/screenshot_jog2.png)
 
 ![Jog Tab](/screenshot_gcode.png)
 
