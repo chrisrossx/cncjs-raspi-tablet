@@ -19,7 +19,7 @@ Additional Features / Improvements from the cncjs-shopflor-tablet project
 * Additiona machine state infromation on the GCode tab
 * Ability to unload gcode, or handle unload events from other loaded interfaces. 
 * Reset and Unlock buttons on the top NavBar when the state is in Alarm or Stall. 
-* Seperate Z Jog Distance buttons and pulldowns from the XY axis. 
+* Seperate Z Jog Distance buttons and pulldowns from the XY axis. Ability to toggle this feature on and off.
 * User configurable Button and Pulldown values for metric and inch jog distances. 
 
 # Screen Shots
