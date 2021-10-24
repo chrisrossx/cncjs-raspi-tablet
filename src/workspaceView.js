@@ -384,7 +384,12 @@ export class WorkspaceView {
         $('[data-route="workspace"] #units').prop('disabled', cannotClick);
 
         $('#jox-xy-distance').prop('disabled', cannotClick);
-        $('#jox-z-distance').prop('disabled', cannotClick);
+        if(this.application.jog.sync_distance == true){
+            $('#jox-z-distance').prop('disabled', true);
+        }else{
+            $('#jox-z-distance').prop('disabled', cannotClick);
+        }
+        
         if(cannotClick == true){
             if(this.application.jog.disable_jog){
                 $('[data-route="workspace"] .btn-jog-xy').prop('disabled', cannotClick);

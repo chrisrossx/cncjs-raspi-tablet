@@ -4,6 +4,7 @@ export class JogButtons{
     constructor(application){
         this.application = application;
         this.disable_jog = false;
+        this.sync_distance = false;
         this.el = {
             xy_distance_btns: [
                 $("#btn-jog-xy-0"),
@@ -35,6 +36,7 @@ export class JogButtons{
             btn_jog_y_minus: $("#btn-jog-y-minus"),
             btn_jog_z_plus: $("#btn-jog-z-plus"),
             btn_jog_z_minus: $("#btn-jog-z-minus"),
+            btn_jog_sync: $("#btn-jog-sync"),
         }
 
 
@@ -53,6 +55,26 @@ export class JogButtons{
             }
             console.log("state", state, this.disable_jog);
         });
+
+
+        this.el.btn_jog_sync.on('click', (e)=>{
+            if(this.sync_distance){
+                this.sync_distance = false;
+                this.el.btn_jog_sync.removeClass('btn-warning');
+                this.el.btn_jog_sync.addClass('btn-secondary');
+                this.el.jog_z_select.show();
+                $(".jog-z-speed .btn-jog-z").show();
+            }else{
+                this.sync_distance = true;
+                this.el.btn_jog_sync.removeClass('btn-secondary');
+                this.el.btn_jog_sync.addClass('btn-warning');
+                this.el.jog_z_select.hide();
+                $(".jog-z-speed .btn-jog-z").hide();
+            }
+            // this.application.workspaceView.update_clickable();
+        });
+
+
 
     }
 
@@ -90,6 +112,9 @@ export class JogButtons{
 
         var xy_distance = this.el.jog_xy_select.val() || 0;
         var z_distance = this.el.jog_z_select.val() || 0;
+        if(this.sync_distance == true){
+            z_distance = xy_distance;
+        }
    
         var fn = {
             'G28': () => this.application.controller.command('gcode', 'G28'),

@@ -17836,6 +17836,9 @@ body {
   padding-right: 5px;
   padding-top: 8px;
 }
+#tab-jog .jog-z-select-td {
+  height: 48px;
+}
 
 /* ****************************************
  * Tab GCode
