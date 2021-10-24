@@ -3,6 +3,7 @@
 export class JogButtons{
     constructor(application){
         this.application = application;
+        this.disable_jog = false;
         this.el = {
             xy_distance_btns: [
                 $("#btn-jog-xy-0"),
@@ -43,6 +44,15 @@ export class JogButtons{
         this.el.btn_jog_y_minus.on('click', () => {this.sendMove("Y-")});
         this.el.btn_jog_z_plus.on('click', () => {this.sendMove("Z+")});
         this.el.btn_jog_z_minus.on('click', () => {this.sendMove("Z-")});
+
+        this.application.controller.on('workflow:state', (state)=>{
+            if(state == "idle"){
+                this.disable_jog = false;
+            }else{
+                this.disable_jog = true;
+            }
+            console.log("state", state, this.disable_jog);
+        });
 
     }
 

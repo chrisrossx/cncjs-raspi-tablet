@@ -383,10 +383,17 @@ export class WorkspaceView {
         $('[data-route="workspace"] [data-name="select-file"]').prop('disabled', cannotClick);
         $('[data-route="workspace"] #units').prop('disabled', cannotClick);
 
-        $('[data-route="workspace"] .btn-jog-xy').prop('disabled', cannotClick);
-        $('[data-route="workspace"] .btn-jog-z').prop('disabled', cannotClick);
         $('#jox-xy-distance').prop('disabled', cannotClick);
         $('#jox-z-distance').prop('disabled', cannotClick);
+        if(cannotClick == true){
+            if(this.application.jog.disable_jog){
+                $('[data-route="workspace"] .btn-jog-xy').prop('disabled', cannotClick);
+                $('[data-route="workspace"] .btn-jog-z').prop('disabled', cannotClick);
+            }
+        }else{
+            $('[data-route="workspace"] .btn-jog-xy').prop('disabled', cannotClick);
+            $('[data-route="workspace"] .btn-jog-z').prop('disabled', cannotClick);
+        }
 
     }
 
