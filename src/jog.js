@@ -57,15 +57,16 @@ export class JogButtons{
 
 
         this.el.btn_jog_sync.on('click', (e)=>{
+            var normal_class = "btn-light";
             if(this.sync_distance){
                 this.sync_distance = false;
                 this.el.btn_jog_sync.removeClass('btn-warning');
-                this.el.btn_jog_sync.addClass('btn-secondary');
+                this.el.btn_jog_sync.addClass(normal_class);
                 this.el.jog_z_select.show();
                 $(".jog-z-speed .btn-jog-z").show();
             }else{
                 this.sync_distance = true;
-                this.el.btn_jog_sync.removeClass('btn-secondary');
+                this.el.btn_jog_sync.removeClass(normal_class);
                 this.el.btn_jog_sync.addClass('btn-warning');
                 this.el.jog_z_select.hide();
                 $(".jog-z-speed .btn-jog-z").hide();
