@@ -17774,6 +17774,9 @@ body {
 #tab-jog {
   visibility: hidden;
 }
+#tab-jog #btn-jog-sync i {
+  color: #505050;
+}
 #tab-jog .xy-panel {
   position: absolute;
   left: 0px;
