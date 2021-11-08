@@ -16,10 +16,10 @@ Features
 * Load and Execute programs from the CNCJS watch directory
 
 Additional Features / Improvements from the cncjs-shopflor-tablet project
-* Additiona machine state infromation on the GCode tab
+* Additional machine state information on the GCode tab
 * Ability to unload gcode, or handle unload events from other loaded interfaces. 
 * Reset and Unlock buttons on the top NavBar when the state is in Alarm or Stall. 
-* Seperate Z Jog Distance buttons and pulldowns from the XY axis. Ability to toggle this feature on and off.
+* Separate Z Jog Distance buttons and pull downs from the XY axis. Ability to toggle this feature on and off.
 * User configurable Button and Pulldown values for metric and inch jog distances. 
 
 # Screen Shots
@@ -46,11 +46,11 @@ The code from cncjs-shopfloor-tablet has been refactored to use ES6 classes.
 ## Kiosk Mode
 
 You can setup a browser to automatically be run in kiosk mode on startup of the Raspberry Pi. 
-* Starting the chromium browser in --kios mode, the fullscreen command in the Navbar menu will not work. 
+* Starting the chromium browser in --kiosk mode, the full screen command in the Navbar menu will not work. 
 
 ## CNCJS Security Token Limitation 
 
-When the app is first loaded into a browser, it will redirect to the CNCJS user login page, that will then set a security token in the broswers localStorage.  If you do not have any users setup in CNCJS, it will set the default token. However it will not redirect the user back the CNCJS-RASPI-TABLET page. A way to workaround this would be to set the token as a url parameter in the browser link. 
+When the app is first loaded into a browser, it will redirect to the CNCJS user login page, that will then set a security token in the browsers localStorage.  If you do not have any users setup in CNCJS, it will set the default token. However it will not redirect the user back the CNCJS-RASPI-TABLET page. A way to workaround this would be to set the token as a url parameter in the browser link. 
 
 For example:
 '''
@@ -59,7 +59,7 @@ http://127.0.0.1:8000/raspi/?token=xxxxxx
 
 ## Default Port for Connection Page
 
-You can set a port paramater on the loading URL, to set a default port to select in the Port Option Dialog on the Connection Page.
+You can set a port parameter on the loading URL, to set a default port to select in the Port Option Dialog on the Connection Page.
 
 For example:
 '''
